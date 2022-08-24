@@ -3,4 +3,14 @@ layout:
 - go.kubebuilder.io/v3
 projectName: operator-example
 repo: github.com/zoux86/operator-example
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: github.com
+  group: zouxapp
+  kind: PodCount
+  path: github.com/zoux86/operator-example/api/v1
+  version: v1
 version: "3"
