@@ -1,0 +1,6 @@
+domain: github.com
+layout:
+- go.kubebuilder.io/v3
+projectName: operator-example
+repo: github.com/zoux86/operator-example
+version: "3"
