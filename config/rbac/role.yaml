@@ -1,0 +1,33 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - zouxapp.github.com
+  resources:
+  - podcounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - zouxapp.github.com
+  resources:
+  - podcounts/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - zouxapp.github.com
+  resources:
+  - podcounts/status
+  verbs:
+  - get
+  - patch
+  - update
