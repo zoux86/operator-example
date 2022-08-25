@@ -18,7 +18,7 @@ package controllers
 
 import (
 	"context"
-
+	"fmt"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -47,11 +47,29 @@ type PodCountReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.11.2/pkg/reconcile
 func (r *PodCountReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	rlog := log.FromContext(ctx)
+	rlog.Info("start to reconciling podCount %s", req.Name)
+	podCount := &zouxappv1.PodCount{}
+	err := r.Client.Get(ctx, req.NamespacedName, podCount)
+	if err != nil {
+		rlog.Error(err, fmt.Sprintf("get podcount %s/%s err during reconcile.", req.Namespace, req.Name))
+		return ctrl.Result{}, nil
+	}
+	podCountCopy := podCount.DeepCopy()
+	if podCount.Spec.Count <= 0 {
+		podCountCopy.Status.Count = 0
+	} else {
+		podCountCopy.Status.Count = podCount.Spec.Count
+	}
 
+	err = r.Client.Status().Update(ctx, podCountCopy)
+	if err != nil {
+		rlog.Error(err, fmt.Sprintf("update crd podcount status error %s/%s  during reconcile.", req.Namespace, req.Name))
+	}
+	//r.Status().Update(ctx, podCountCopy, metav1.UpdateOptions{})
 	// TODO(user): your logic here
 
-	return ctrl.Result{}, nil
+	return ctrl.Result{}, err
 }
 
 // SetupWithManager sets up the controller with the Manager.

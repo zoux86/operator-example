@@ -29,13 +29,14 @@ type PodCountSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of PodCount. Edit podcount_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Count int `json:"count,omitempty"`
 }
 
 // PodCountStatus defines the observed state of PodCount
 type PodCountStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+	Count int `json:"count,omitempty"`
 }
 
 //+kubebuilder:object:root=true
